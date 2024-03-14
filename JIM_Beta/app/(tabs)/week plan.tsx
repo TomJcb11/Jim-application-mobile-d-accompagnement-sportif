@@ -1,21 +1,23 @@
-import { StyleSheet, TextInput,Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput,Button, TouchableOpacity, Pressable } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { Link } from 'expo-router';
+
+
 
 export default function WeekPlanScreen() {
   const [showForm, setShowForm] = useState(false);
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Week Plan</Text>
       <Text> La page destinée à la planification de la semaine</Text>
-      <View style={styles.button}>
-        <TouchableOpacity onPress={() => setShowForm(true)}> 
-            <Text style={styles.quote}> Pas de programme ?</Text>
-            <Text style={styles.quote}> Composez le vous même dès maintenant en quelques clics</Text>
-        </TouchableOpacity>
+      <View>
+        <Button title='Créer un programme' onPress={() => navigation.navigate('week plan form')} />
+        <Button title='GoBack' onPress={() => navigation.goBack()} />
       </View> 
     </View>
-
   );
 }
 
