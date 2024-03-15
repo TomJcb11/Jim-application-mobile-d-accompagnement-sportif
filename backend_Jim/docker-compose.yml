@@ -1,0 +1,16 @@
+version: '3'
+services:
+  postgresql:
+    container_name: postgresjimbeta
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: Jim
+      POSTGRES_PASSWORD: Jim
+      POSTGRES_DB: postgresJim
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+
+volumes:
+  postgresql_data:

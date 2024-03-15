@@ -1,13 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import { Button, Platform, StyleSheet } from 'react-native';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
+import { useNavigation } from 'expo-router';
+
+
+
 
 export default function ModalScreen() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profil utilisateur</Text>
+      <Button title='GoBack' onPress={() => navigation.goBack()} />
       
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
