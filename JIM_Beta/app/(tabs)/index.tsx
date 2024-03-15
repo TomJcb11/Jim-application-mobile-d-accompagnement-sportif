@@ -12,7 +12,7 @@ export default function TabOneScreen() {
         <Text style={styles.quote}>We go JIM,</Text>
         <Text style={styles.quote}>JIM</Text>
       </View>
-            </View>
+    </View>
         );
 }
 

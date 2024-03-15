@@ -14,8 +14,12 @@ export default function WeekPlanScreen() {
       <Text style={styles.title}>Tab Week Plan</Text>
       <Text> La page destinée à la planification de la semaine</Text>
       <View>
-        <Button title='Créer un programme' onPress={() => navigation.navigate('week plan form')} />
-        <Button title='GoBack' onPress={() => navigation.goBack()} />
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('week plan form')}>
+          <Text style={styles.quote}>Créer un programme</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+          <Text style={styles.quote}>Rentre chez ta mère</Text>
+        </TouchableOpacity>        
       </View> 
     </View>
   );
@@ -32,7 +36,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button:{
-    marginTop:60,
+    margin:15,
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
