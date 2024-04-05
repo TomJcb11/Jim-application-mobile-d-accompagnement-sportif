@@ -100,4 +100,10 @@ Important traiter les données bien :
 	- 
 
 
- 
+créer un sondage sur ce que devrait être une bonne app de sport:
+- prendre en compte les envies, besoins
+- concevoir son programme 
+- proposer des suggestions et les faire évaluer de 1 étoiles à 5  étoiles
+- si un utilisateurs s'est inscirit à des scéances outdoor alors lancer une alerte pour le prévenir s'il doit prévoir du matériel 
+- donner à l'utilisateur la possibilité d'éventuellement annoter le week plan s'il désire y ajouter quelque chose (entrainement supplémentaires, autres activités sportive)
+- pour la partie outdoor réfléchir à la possiblité future d'adapter en fonction de la météo .

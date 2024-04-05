@@ -13,6 +13,8 @@ export default function ModalScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profil utilisateur</Text>
+      //TO DO : formulaire d'inscirption et placeholder
+      <Text></Text>
       <Button title='GoBack' onPress={() => navigation.goBack()} />
       
 

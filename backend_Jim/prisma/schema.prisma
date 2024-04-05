@@ -1,40 +1,124 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-}
-
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-}
-
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
+  user_id              String           @id @unique @default(cuid())
+  user_birthDate       DateTime         @default(now())
+  user_inscriptionDate DateTime         @default(now())
+  user_sex             Sex              @default(O)
+  body_height          String
+  health_issue         UserHealthIssue[]
+  ownedWeekPlans       WeekPlan[]       @relation("OwnerRelation")
+  userWeekPlans        WeekPlan[]       @relation("UserRelation")
+  user_body            User_Body[]
+}
+
+model UserHealthIssue {
+  id          String @id @unique @default(cuid())
+  user        User   @relation(fields: [userId], references: [user_id])
+  userId      String
+  healthIssue Health
+}
+
+model Levels {
+  level_id          String     @id @unique @default(cuid())
+  level_description String     @unique
+  exercises         Exercices[]
+}
+
+model Muscles {
+  muscle_id          String          @id @unique @default(cuid())
+  muscle_description String          @unique
+  exerciseXMuscles   ExerciseXMuscles[]
+}
+
+model Equipements {
+  equipement_id          String  @id @unique @default(cuid())
+  equipement_description String  @unique
+  equipement_photo_url   String? @unique
+}
+
+model Exercices {
+  exercise_id          String          @id @unique @default(cuid())
+  exercise_instruction String
+  exercise_intensities Intensities     @default(medium)
+  level_id             String
+  exercise_level       Levels          @relation(fields: [level_id], references: [level_id])
+  exerciseXMedias      ExerciceXMedia[]
+  exerciseXMuscles     ExerciseXMuscles[]
+}
+
+model ExerciceXMedia {
+  id           String    @id @unique @default(cuid())
+  exercice_id  String
+  exercise     Exercices @relation(fields: [exercice_id], references: [exercise_id])
+  media_url    String
+}
+
+model ExerciseXMuscles {
+  id           String    @id @unique @default(cuid())
+  exercice_id  String
+  exercise     Exercices @relation(fields: [exercice_id], references: [exercise_id])
+  muscle_id    String
+  muscle       Muscles   @relation(fields: [muscle_id], references: [muscle_id])
+}
+
+model WeekPlan {
+  id                          String          @id @unique @default(cuid())
+  program_owner_id            String
+  program_owner               User            @relation("OwnerRelation", fields: [program_owner_id], references: [user_id])
+  program_user_id             String?
+  program_user                User?           @relation("UserRelation", fields: [program_user_id], references: [user_id])
+  infrastructure_availability Infrastructure?
+  program_data                Json
+  workoutSessions             WorkoutSession[]
+}
+
+model WorkoutSession {
+  id            String    @id @unique @default(cuid())
+  week_plan_id  String
+  week_plan     WeekPlan  @relation(fields: [week_plan_id], references: [id])
+  session_data  Json
+  health_issues Health  
+  current_date  DateTime
+}
+
+model User_Body {
+  id             String   @id @unique @default(cuid())
+  user_id        String
+  user            User    @relation(fields: [user_id], references: [user_id])
+  body_weight    Float
+  measuring_date DateTime @default(now())
+}
+
+enum Sex {
+  M
+  F
+  O
+}
+
+enum Intensities {
+  low
+  medium
+  high
+  super
+}
+
+enum Infrastructure {
+  home
+  gym
+  outdoor
+}
+
+enum Health {
+  none
+  heart
+  back
+  right_arm
+  left_arm
+  right_leg
+  left_leg
+  muscle_soreness
 }
