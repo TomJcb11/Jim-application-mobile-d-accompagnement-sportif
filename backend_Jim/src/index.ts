@@ -1,21 +1,30 @@
-import { PrismaClient } from '@prisma/client'
+import express from 'express';
+import { ApolloServer, gql } from 'apollo-server-express';
+import { PrismaClient } from '@prisma/client';
+import resolver from './middleware/resolver';
+import schema from './middleware/schema';
 
-const prisma = new PrismaClient()
+// Création du client Prisma
+const prisma = new PrismaClient();
 
-async function main() {
-  const post = await prisma.post.update({
-    where: { id: 1 },
-    data: { published: true },
-  })
-  console.log(post)
-}
+// Création du serveur Apollo
+const server = new ApolloServer({ 
+    typeDefs: schema, 
+    resolvers: resolver, 
+    context: {
+        prisma,
+    },
+});
+// Création de l'application Express
+const app  = express();
 
-main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
-  .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+// Démarrage du serveur Apollo
+server.start().then(() => {
+    // @ts-ignore
+    server.applyMiddleware({ app });
+  
+    // Démarrage du serveur
+    app.listen({ port: 4000 }, () =>
+      console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+    );
+  });
