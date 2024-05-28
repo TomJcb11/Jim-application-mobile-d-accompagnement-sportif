@@ -1,0 +1,25 @@
+# Utilisez une image Node.js
+FROM node:20
+
+# Définissez le répertoire de travail dans le conteneur
+WORKDIR /src
+
+# Copiez le fichier package.json et package-lock.json
+COPY package*.json ./
+
+# Installez les dépendances de l'application
+RUN npm install
+
+COPY ./src/prisma ./prisma
+
+
+RUN npx prisma generate --schema ./prisma/schema.prisma
+
+# Copiez le reste du code de l'application
+COPY . .
+
+# Exposez le port sur lequel votre application s'exécute
+EXPOSE 3000
+
+# Démarrez l'application
+CMD [ "node", "index.js" ]

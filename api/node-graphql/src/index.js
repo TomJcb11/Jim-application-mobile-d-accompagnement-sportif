@@ -3,12 +3,22 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const morgan = require('morgan');
 const cors = require('cors');
-
+const env= require('dotenv').config({ path: '../.env' });
 const { PrismaClient } = require('@prisma/client')
 const  typeDefs  = require('./schema.js')
 const  resolvers  = require('./resolver.js')
+const fs = require('fs');
+const https = require('https');
 
 const app = express();
+
+const sslServer = https.createServer({
+    key: fs.readFileSync('/certs/key.pem'),
+    cert: fs.readFileSync('/certs/cert.pem'),
+}, app)
+
+  
+
 // Utilisez morgan pour enregistrer les requêtes
 app.use(cors());
 
@@ -25,7 +35,7 @@ app.use(morgan(function (tokens, req, res) {
 }));
 
 
-const port = process.env.PORT || 9090;
+const port = process.env.PORT || 3000;
 const prisma = require('./prismaClient.js');
 
 (async () => {
@@ -40,8 +50,8 @@ const prisma = require('./prismaClient.js');
     await server.start();
     server.applyMiddleware({ app });
 
-    app.listen({ port }, () => {
-        console.log(`Server runs at: http://localhost:${port}`);
+    sslServer.listen(port, () => {
+        console.log(`Server runs at: https://localhost:${port}`);
         //console.log('typeDefs:', typeDefs);
         if(typeDefs!= undefined){
             console.log('import schéma ok')
@@ -54,3 +64,5 @@ const prisma = require('./prismaClient.js');
         }
     });
 })();
+
+
