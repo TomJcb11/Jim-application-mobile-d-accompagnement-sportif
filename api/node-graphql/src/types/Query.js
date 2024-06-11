@@ -32,7 +32,7 @@ type Query {
     exerciseXMedias: [ExerciseXMedia]
     exerciseXMuscle(id: ID!): ExerciseXMuscles
     exerciseXMuscles: [ExerciseXMuscles]
-    weekPlan(id: ID!): WeekPlan
+    weekPlan(programUserId: ID!): WeekPlan
     weekPlans: [WeekPlan]
     workoutSession(id: ID!): WorkoutSession
     workoutSessions: [WorkoutSession]

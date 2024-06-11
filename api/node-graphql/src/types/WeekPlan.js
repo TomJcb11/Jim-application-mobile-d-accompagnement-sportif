@@ -18,12 +18,14 @@ scalar GraphQLJSON
 
 type WeekPlan {
     id: ID!
-    programOwnerId: String
-    programOwner: User
+    programOwnerId: String 
     programUserId: String
-    programUser: User
+    programOwner: User
+    programUseruser: User
     infrastructureAvailability: Infrastructure
     programData: GraphQLJSON
+    dataProviding:GraphQLJSON
+    programStartDate: String
     workoutSessions: [WorkoutSession]
 }
 `;

@@ -38,56 +38,49 @@ input UserInput {
 }
 
 input UserHealthIssueInput {
-    id: ID!
-    userId: ID!
+    
+    userId: ID
     healthIssue: Health!
 }
 
 input LevelsInput {
-    levelId: ID!
     levelDescription: String
 }
 
 input MusclesInput {
-    muscleId: ID!
     muscleDescription: String
 }
 
 input EquipementsInput {
-    equipementId: ID!
     equipementDescription: String
     equipementPhotoUrl: String
 }
 
 input ExercisesInput {
-    exerciseId: ID!
     exerciseInstruction: String
     exerciseIntensities: Intensities
     levelId: String
 }
 
 input ExerciseXMediaInput {
-    id: ID!
     exerciseId: String
     mediaUrl: String
 }
 
 input ExerciseXMusclesInput {
-    id: ID!
     exerciseId: String
     muscleId: String
 }
 
 input WeekPlanInput {
-    id: ID!
     programOwnerId: String
     programUserId: String
     infrastructureAvailability: Infrastructure
     programData: GraphQLJSON
+    dataProviding: GraphQLJSON
 }
 
 input WorkoutSessionInput {
-    id: ID!
     weekPlanId: String
     sessionData: GraphQLJSON
     healthIssues: Health
@@ -95,52 +88,12 @@ input WorkoutSessionInput {
 }
 
 input UserBodyInput {
-    id: ID!
+
     userId: String
     bodyWeight: Float
     measuringDate: String
 }
-input ExercisesInput {
-    exerciseId: ID!
-    exerciseInstruction: String
-    exerciseIntensities: Intensities
-    levelId: String
-}
 
-input ExerciseXMediaInput {
-    id: ID!
-    exerciseId: String
-    mediaUrl: String
-}
-
-input ExerciseXMusclesInput {
-    id: ID!
-    exerciseId: String
-    muscleId: String
-}
-
-input WeekPlanInput {
-    id: ID!
-    programOwnerId: String
-    programUserId: String
-    infrastructureAvailability: Infrastructure
-    programData: GraphQLJSON
-}
-
-input WorkoutSessionInput {
-    id: ID!
-    weekPlanId: String
-    sessionData: GraphQLJSON
-    healthIssues: Health
-    currentDate: String
-}
-
-input UserBodyInput {
-    id: ID!
-    userId: String
-    bodyWeight: Float
-    measuringDate: String
-}
 type AuthPayload {
     token: String!
     user: User!
@@ -154,47 +107,47 @@ type Mutation {
 
 
     createUser(user: UserInput!): User!
-    updateUser(user: UserInput!): User!
+    updateUser(id: ID!, user: UserInput!): User!
     deleteUser(userId: ID!): Boolean!
 
     createUserHealthIssue(userHealthIssue: UserHealthIssueInput!): UserHealthIssue!
-    updateUserHealthIssue(userHealthIssue: UserHealthIssueInput!): UserHealthIssue!
+    updateUserHealthIssue(id: ID!, userHealthIssue: UserHealthIssueInput!): UserHealthIssue!
     deleteUserHealthIssue(id: ID!): Boolean!
 
     createLevels(level: LevelsInput!): Levels!
-    updateLevels(level: LevelsInput!): Levels!
+    updateLevels(id: ID!, level: LevelsInput!): Levels!
     deleteLevels(levelId: ID!): Boolean!
 
     createMuscles(muscle: MusclesInput!): Muscles!
-    updateMuscles(muscle: MusclesInput!): Muscles!
+    updateMuscles(id: ID!, muscle: MusclesInput!): Muscles!
     deleteMuscles(muscleId: ID!): Boolean!
 
     createEquipements(equipement: EquipementsInput!): Equipements!
-    updateEquipements(equipement: EquipementsInput!): Equipements!
+    updateEquipements(id: ID!, equipement: EquipementsInput!): Equipements!
     deleteEquipements(equipementId: ID!): Boolean!
 
     createExercises(exercise: ExercisesInput!): Exercises!
-    updateExercises(exercise: ExercisesInput!): Exercises!
+    updateExercises(id: ID!, exercise: ExercisesInput!): Exercises!
     deleteExercises(exerciseId: ID!): Boolean!
 
     createExerciseXMedia(exerciseXMedia: ExerciseXMediaInput!): ExerciseXMedia!
-    updateExerciseXMedia(exerciseXMedia: ExerciseXMediaInput!): ExerciseXMedia!
+    updateExerciseXMedia(id: ID!, exerciseXMedia: ExerciseXMediaInput!): ExerciseXMedia!
     deleteExerciseXMedia(id: ID!): Boolean!
 
     createExerciseXMuscles(exerciseXMuscles: ExerciseXMusclesInput!): ExerciseXMuscles!
-    updateExerciseXMuscles(exerciseXMuscles: ExerciseXMusclesInput!): ExerciseXMuscles!
+    updateExerciseXMuscles(id: ID!, exerciseXMuscles: ExerciseXMusclesInput!): ExerciseXMuscles!
     deleteExerciseXMuscles(id: ID!): Boolean!
 
     createWeekPlan(weekPlan: WeekPlanInput!): WeekPlan!
-    updateWeekPlan(weekPlan: WeekPlanInput!): WeekPlan!
+    updateWeekPlan(id: ID!, weekPlan: WeekPlanInput!): WeekPlan!
     deleteWeekPlan(id: ID!): Boolean!
 
     createWorkoutSession(workoutSession: WorkoutSessionInput!): WorkoutSession!
-    updateWorkoutSession(workoutSession: WorkoutSessionInput!): WorkoutSession!
+    updateWorkoutSession(id: ID!, workoutSession: WorkoutSessionInput!): WorkoutSession!
     deleteWorkoutSession(id: ID!): Boolean!
 
     createUserBody(userBody: UserBodyInput!): UserBody!
-    updateUserBody(userBody: UserBodyInput!): UserBody!
+    updateUserBody(id: ID!,userBody: UserBodyInput!): UserBody!
     deleteUserBody(id: ID!): Boolean!
   
 }

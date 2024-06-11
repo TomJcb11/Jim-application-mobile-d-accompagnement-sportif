@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/",
+    "start": "nodemon src/",
     "runSeed": "node src/prisma/seed",
     "migrate": "npx prisma migrate dev --schema=./src/prisma/schema.prisma"
   },
@@ -22,7 +22,8 @@
   "dependencies": {
     "@prisma/client": "^5.14.0",
     "apollo-server": "^3.13.0",
-    "bcrypt": "^5.1.1",
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "cuid": "^3.0.0",
     "dotenv": "^16.4.5",

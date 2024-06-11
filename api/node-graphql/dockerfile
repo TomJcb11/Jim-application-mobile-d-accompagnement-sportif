@@ -10,9 +10,8 @@ COPY package*.json ./
 # Installez les dépendances de l'application
 RUN npm install
 
+# Copiez le répertoire prisma et générez le client Prisma
 COPY ./src/prisma ./prisma
-
-
 RUN npx prisma generate --schema ./prisma/schema.prisma
 
 # Copiez le reste du code de l'application

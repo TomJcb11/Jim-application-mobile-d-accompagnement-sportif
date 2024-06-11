@@ -15,18 +15,18 @@ const Instructions = require('./Instructions')
 module.exports = `
 scalar DateTime
 type User {
-    userId: ID!
-    userBirthDate: DateTime!
-    userInscriptionDate: DateTime!
-    userSex: Sex!
-    bodyHeight: Float
+    userId: ID
+    userBirthDate: DateTime
+    userInscriptionDate: DateTime
+    userSex: Sex
+    bodyHeight: Float!
     healthIssue: [UserHealthIssue]
     ownedWeekPlans: [WeekPlan]
     userWeekPlans: [WeekPlan]
     userBody: [UserBody]
     userLvl: [Levels]
-    userLevel: Int!
-    userXp: Int!
+    userLevel: Int
+    userXp: Int
     name: String!
     email: String!
     password: String!

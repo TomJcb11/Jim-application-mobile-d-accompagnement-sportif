@@ -8,7 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -113,10 +112,11 @@ model WeekPlan {
   id                          String          @id @unique @default(cuid())
   programOwnerId              String
   programOwner                User            @relation("OwnerRelation", fields: [programOwnerId], references: [userId])
-  programUserId               String?
+  programUserId               String?         @unique
   programUser                 User?           @relation("UserRelation", fields: [programUserId], references: [userId])
   infrastructureAvailability Infrastructure?
   programData                 Json
+  dataProviding               Json            
   workoutSessions             WorkoutSession[]
 }
 

@@ -1,9 +1,10 @@
 const  GraphQLJSON  = require('graphql-type-json');
 const cuid = require('cuid');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const  prisma = require('./prismaClient.js')
 const { DateTimeResolver } = require('graphql-scalars');
 const jwt = require('jsonwebtoken');
+const generateWeeklyPlan = require('./services/generateWeeklyPlan.js')
 
 function generateId() {
   return cuid();
@@ -109,10 +110,10 @@ const resolvers = {
     },
 
 
-    weekPlan: (_parent, { id }) => {
+    weekPlan: (_parent, { programUserId }) => {
       return prisma.weekPlan.findUnique({
         where: {
-          id: id
+          programUserId: programUserId
         }
       });
     },
@@ -148,24 +149,82 @@ const resolvers = {
   Mutation: {
     createUser: async (_parent, { user }) => {
       const hashedPassword = await bcrypt.hash(user.password, 10);
+      
+      //a bunch of test for new users
       const birthDate = new Date(user.userBirthDate);
       if (birthDate > new Date()) {
         throw new Error('Birth date cannot be in the future');
       }
-      const newUser = await prisma.user.create({
-        data: {
-          ...user,
-          userLevel:0,
-          userXp:0,
-
-          password: hashedPassword, 
-          userId: generateId(),
-          userBirthDate: new Date(user.userBirthDate).toISOString(),
-          userInscriptionDate: new Date().toISOString(),
-        },
+      const existingUser = await prisma.user.findUnique({
+        where: { phoneNumber: user.phoneNumber },
       });
-      return newUser;
+      if (existingUser) {
+        throw new Error('This phone number is already associated with an account');
+      }
+      const phoneNumberRegex = /^[0-9]*$/;
+      if (!phoneNumberRegex.test(user.phoneNumber)) {
+        throw new Error('Phone number should not contain letters');
+      }
+      const existingUserWithEmail = await prisma.user.findUnique({
+        where: { email: user.email },
+      });
+      if (existingUserWithEmail) {
+        throw new Error('This email is already associated with an account');
+      }
+
+      // end of the test bloc
+    
+      try {
+        const newUser = await prisma.user.create({
+          data: {
+            name: user.name,
+            email: user.email,
+            password: hashedPassword,
+            phoneNumber: user.phoneNumber,
+            userSex: user.userSex,
+            bodyHeight: user.bodyHeight,
+            userBirthDate: birthDate,
+            userInscriptionDate: new Date(),
+            userLevel: 0,
+            userXp: 0,
+          },
+        })
+        console.log("New user correctly added");
+        console.log(user)
+        const userBodyData = user.userBody.map(body => ({
+          ...body,
+          userId: newUser.userId,
+          bodyWeight: body.bodyWeight,
+          measuringDate: body.measuringDate,
+          
+        }));
+        
+        
+    
+        const healthIssueData = user.healthIssue.map(issue => ({
+          ...issue,
+          userId: newUser.userId,
+          id: cuid(),
+          healthIssue: issue.healthIssue,
+        }));
+        console.log(userBodyData);
+        console.log(healthIssueData);
+    
+        await prisma.$transaction([
+          prisma.UserBody.createMany({ data: userBodyData }),
+          prisma.UserHealthIssue.createMany({ data: healthIssueData }),
+        ]);
+        console.log('transaction done')
+        return newUser;
+      } catch (error) {
+        // Gérer les erreurs ici
+        console.error(error);
+        throw error;
+      }
     },
+
+
+
 
     login: async (parent, { email, password }, context) => {
       const user = await context.prisma.user.findUnique({ where: { email } });
@@ -228,10 +287,17 @@ const resolvers = {
       return newMuscle;
     },
     createWeekPlan: async (_parent, { weekPlan }) => {
-      const newPlan = await prisma.weekPlan.create({
-        data: weekPlan
+        // Génération du programData à partir des données fournies
+        const programData = await generateWeeklyPlan(weekPlan.dataProviding);
+
+        // Ajout du programData au weekPlan
+        weekPlan.programData = programData;
+
+        // Création du nouveau plan d'entraînement avec Prisma
+        const newPlan = await prisma.weekPlan.create({
+          data: weekPlan
       });
-      return newPlan;
+    return newPlan;
     },
     createWorkoutSession: async (_parent, { workoutSession }) => {
       const newSession = await prisma.workoutSession.create({
