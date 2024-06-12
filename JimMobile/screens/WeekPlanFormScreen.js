@@ -2,7 +2,7 @@ import React, { useState,useContext } from 'react';
 import { View, Text, Button, ScrollView, TextInput,StyleSheet, ActivityIndicator,Alert } from 'react-native';
 import { RoundedCheckbox } from "react-native-rounded-checkbox";
 import { sharedStyles } from '../shared/style';
-import CheckBox from '../component/checkbox.js';
+
 import { useMutation, gql } from '@apollo/client';
 
 import WeekPlanContext from '../contexts/weekPlanContext';
@@ -40,7 +40,6 @@ const [createWeekPlan, { data }] = useMutation(CREATE_WEEK_PLAN);
 
 const handleSubmit = async () => {
   try {
-    console.log(user.userId)
       const infrastructureAvailability = formData.Infrastructure[0] === 'Yes' ? 'gym' : 'home';
       const { data } = await createWeekPlan({ 
         variables: { 
@@ -84,7 +83,6 @@ const handleSubmit = async () => {
                         [muscleGroup]: [],
                     },
                 };
-                console.log(newFormData)
                 return newFormData;
             } else {
                 // Sinon, cochez tous les muscles du groupe
@@ -95,7 +93,6 @@ const handleSubmit = async () => {
                         [muscleGroup]: userProviding.targetedMuscles[muscleGroup],
                     },
                 };
-                console.log(newFormData)
                 return newFormData;
             }
         });
@@ -113,7 +110,6 @@ const handleSubmit = async () => {
                 [muscleGroup]: prevFormData[category][muscleGroup].filter((i) => i !== item),
               },
             };
-            console.log(newFormData);
             return newFormData;
           } else {
             // Sinon, ajoutez l'élément à la liste
@@ -124,7 +120,6 @@ const handleSubmit = async () => {
                 [muscleGroup]: [...(prevFormData[category] && prevFormData[category][muscleGroup] || []), item],
               },
             };
-            console.log(newFormData);
             return newFormData;
           }
         } else {
@@ -134,14 +129,12 @@ const handleSubmit = async () => {
               ...prevFormData, 
               [category]: prevFormData[category].filter((i) => i !== item),
             };
-            console.log(newFormData);
             return newFormData;
           } else {
             const newFormData = { 
               ...prevFormData, 
               [category]: [...(prevFormData[category] || []), item] 
             };
-            console.log(newFormData);
             return newFormData;
           }
         }

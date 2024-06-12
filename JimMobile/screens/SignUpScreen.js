@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { View, Text,FlatList,TouchableOpacity } from 'react-native';
-import UserContext from '../contexts/UserContext'; 
+import { View, Text,FlatList,TouchableOpacity, Alert } from 'react-native';
+import AuthContext from '../contexts/AuthContext'; 
 import { StyleSheet } from 'react-native';
 import { useMutation } from '@apollo/client';
 import { CREATE_USER } from '../query/createUser';
@@ -8,33 +8,78 @@ import { CREATE_USER } from '../query/createUser';
 
 
 const SignUpScreen = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(AuthContext);
   const [createUser, { data }] = useMutation(CREATE_USER);
 
   const handleCreateUser = async () => {
     try {
-      await createUser({ 
-        variables: { 
-          user: {
-            name: user.name, 
-            email: user.email, 
-            password: user.password,
-            bodyHeight: user.bodyHeight,
-            phoneNumber: user.phoneNumber,
-            userBirthDate: user.userBirthDate,
-            userInscriptionDate: user.userInscriptionDate,
-            userSex: user.userSex,
-            userXp: user.userXp,
-            userLevel: user.userLevel,
-            healthIssue: user.healthIssue,
-            userBody: user.userBody
-          } 
-        } 
+      const response = await fetch(process.env.API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+            mutation CreateUser($user: UserInput!) {
+              createUser(user: $user) {
+                email
+                password
+                name
+                bodyHeight
+                phoneNumber
+                userBirthDate
+                userInscriptionDate
+                userSex
+                userXp
+                userLevel
+                healthIssue {
+                  id
+                  healthIssue
+                }
+                userBody {
+                  bodyWeight
+                  id
+                  measuringDate
+                  userId
+                }
+              }
+            }
+          `,
+          variables: {
+            user: {
+              name: user.name,
+              email: user.email,
+              password: user.password,
+              phoneNumber: user.phoneNumber,
+              userSex: user.userSex,
+              bodyHeight: parseFloat(user.bodyHeight),
+              userBirthDate: user.birthDate, 
+              userXp: user.userXp,
+              userLevel: user.userLevel,
+              userBody: user.userBody.map(body => ({
+                bodyWeight: parseFloat(body.bodyWeight),
+                measuringDate: body.measuringDate
+              })),
+              healthIssue: user.healthIssue.map(issue => ({
+                healthIssue: issue.healthIssue.split(' ').map((word, index) => index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('')
+              })),
+            }
+          },
+        }),
       });
+      
+      const api_response = await response.json();
+      console.log(api_response)
+      if (api_response.data && api_response.data.createUser) {
+        console.log("User created successfully");
+        Alert.alert("User created successfully")
+      } else {
+        console.error("Error creating user:", api_response.errors);
+      }
     } catch (error) {
       console.error("Error creating user:", error);
     }
-  };
+  }
 
   return (
     <View style={styles.container}>

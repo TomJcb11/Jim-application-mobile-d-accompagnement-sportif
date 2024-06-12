@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { Button, TextInput, View, StyleSheet, Text } from 'react-native';
-import UserContext from '../contexts/UserContext';
+import AuthContext from '../contexts/AuthContext';
 import { Picker } from '@react-native-picker/picker';
 
 const ScreenOne = ({navigation}) => {
-  const context = useContext(UserContext);
+  const context = useContext(AuthContext);
   const [user, setUser] = useState({});
   const [sex, setSex] = useState('Other');
 

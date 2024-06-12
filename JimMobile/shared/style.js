@@ -14,5 +14,9 @@ export const sharedStyles = StyleSheet.create({
     borderBottomWidth:1,
     borderBottomColor:'#000',
   },
+  container: {
+    flex: 1,
+    padding: 20,
+  },
 
 });

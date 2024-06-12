@@ -1,7 +1,9 @@
 import React, { useContext, useState,useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView,TextInput,Button,Alert } from 'react-native';
-import UserContext from '../contexts/UserContext';
+import AuthContext from '../contexts/AuthContext';
 import { Picker } from '@react-native-picker/picker';
+import { RoundedCheckbox } from "react-native-rounded-checkbox";
+
 
 const healthIssues = ['None', 'Heart', 'Back', 'Left leg', 'Right leg', 'Left arm', 'Right arm'];
 
@@ -30,14 +32,18 @@ const CheckBox = ({isSelected, onSelection}) => {
   );
 };
 
+
+
 const FormScreen3 = ({navigation}) => {
-  const context = useContext(UserContext);
+  const context = useContext(AuthContext);
   const user = context?.user;
   const setUser = context?.setUser;
+  const today = new Date();
 
-  const [day, setDay] = useState('1');
-  const [month, setMonth] = useState('1');
-  const [year, setYear] = useState(`${new Date().getFullYear()}`);
+
+  const [day, setDay] = useState(`${today.getDate()}`);
+  const [month, setMonth] = useState(`${today.getMonth() + 1}`); // Les mois sont indexés à partir de 0 en JavaScript, donc nous ajoutons 1.
+  const [year, setYear] = useState(`${today.getFullYear()}`);
   const [weight, setWeight] = useState('50');
   const [height, setHeight] = useState('150');
 
@@ -136,8 +142,8 @@ const FormScreen3 = ({navigation}) => {
     <Text style={styles.title}>Height (cm) </Text>
     <TextInput
       style={styles.input}
-      onChangeText={setHeight} // Assurez-vous d'utiliser la bonne fonction pour définir la hauteur
-      value={height} // Assurez-vous d'utiliser la bonne variable pour la hauteur
+      onChangeText={setHeight} 
+      value={height} 
       placeholder="Enter your height"
       keyboardType="numeric"
     />
@@ -154,23 +160,29 @@ const FormScreen3 = ({navigation}) => {
   </View>
 </View>
     <Text style={styles.title}>Health Issues ? </Text>
-    <ScrollView>
-      <View style={styles.checkboxListContainer}>
-        {healthIssues.map((issue, index) => (
-          <View key={index} style={styles.checkboxContainer}>
-            <CheckBox
-              isSelected={selectedIssues.includes(issue)}
-              onSelection={() => handleIssue(issue)}
-            />
-            <Text style={styles.label}>{issue}</Text>
-          </View>
-        ))}
-        <Button
-              title="Submit"
-              onPress={handleSubmit}
-            />
+    
+<ScrollView>
+  <View style={styles.checkboxListContainer}>
+    {healthIssues.map((issue, index) => (
+      <View key={index} style={styles.checkboxContainer}>
+        <RoundedCheckbox
+          text={'¤'}
+          onPress={(checked) => handleIssue(issue)}
+          isChecked={selectedIssues.includes(issue)}
+          style={{ padding: 10, flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          textStyle={{ fontSize: 18 }}
+          checkedColor='#007BFF'
+          outerStyle={{borderColor: 'grey', borderWidth: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}
+        />
+        <Text style={styles.label}>{issue}</Text>
       </View>
-    </ScrollView>
+    ))}
+  </View>
+  <Button
+    title="Submit"
+    onPress={handleSubmit}
+  />
+</ScrollView>
     
     
   </View>
@@ -216,5 +228,14 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     marginBottom: 20,
     width: 160
+  },
+  checkboxListContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  checkboxContainer: {
+    width: '48%', // Pour deux colonnes, chaque colonne prendra environ 48% de la largeur totale (en laissant un peu d'espace pour les marges)
+    // Le reste de vos styles...
   },
 });

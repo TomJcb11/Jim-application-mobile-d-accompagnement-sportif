@@ -61,6 +61,13 @@ function UserProfileScreen({ navigation }) {
         <Text style={styles.text}>Level: {user.userLevel}</Text>
         <Text style={styles.text}>Sex: {user.userSex}</Text>
         <Text style={styles.text}>UserID: {user.userId}</Text>
+        {user.healthIssue && Array.isArray(user.healthIssue) ? (
+        user.healthIssue.map((issue, index) => (
+          <Text key={index} style={styles.text}>Health Issue: {issue.healthIssue}</Text>
+        ))
+      ) : (
+        <Text style={styles.text}>Health Issue: {user.healthIssue}</Text>
+      )}
         <View style={styles.buttonContainer}>
           <Button title="Logout" onPress={logout} color="#FFFFFF" />
         </View>
@@ -68,7 +75,7 @@ function UserProfileScreen({ navigation }) {
       ) : (
         <View>
           <View style={styles.error}>
-            <Text style={styles.texterror}>Vous n'êtes pas encore connecté</Text>
+            <Text style={styles.texterror}>You are still in guest mode</Text>
           </View>
           <View style={styles.buttonContainer}>
             <Button title="SignIn" onPress={() => navigation.navigate('FormScreen1')} color="#FFFFFF" />

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
 import AuthContext from './contexts/AuthContext';
-import { UserProvider } from './contexts/UserContext';
+
 
 
 import { Button, Modal } from 'react-native';
@@ -21,6 +21,10 @@ import FormScreen1 from './screens/FormScreen1';
 import FormScreen2 from './screens/FormScreen2';
 import FormScreen3 from './screens/FormScreen3';
 
+import { FontAwesome5 } from '@expo/vector-icons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
+
 
 import Header from './component/header';
 import { WeekPlanProvider } from './contexts/weekPlanContext';
@@ -31,9 +35,31 @@ const RootStack = createStackNavigator();
 function TabNavigator() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="WeekPlan" component={WeekPlanScreen} />
-      <Tab.Screen name="NewSession" component={NewSessionScreen} />
-      <Tab.Screen name="Analytics" component={AnalyticsScreen} />
+      <Tab.Screen 
+      name="WeekPlan" 
+      component={WeekPlanScreen}
+      options={{ 
+        tabBarIcon: ({ color, size }) => (
+      <FontAwesome5 name="calendar-week" size={24} color={color} />        ),
+      }}
+       />
+      <Tab.Screen
+        name="NewSession"
+        component={NewSessionScreen}
+        options={{ 
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="dumbbell" size={size} color={color} />
+          ),
+        }}
+        />
+      <Tab.Screen 
+      name="Analytics"
+      component={AnalyticsScreen}
+      options={{ 
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="google-analytics" size={24} color={color} />
+        ),
+      }} />
     </Tab.Navigator>
   );
 }
@@ -61,7 +87,6 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser }}>
-      <UserProvider>
         <WeekPlanProvider>
           <ApolloProvider client={client}>
               <NavigationContainer>
@@ -69,7 +94,6 @@ export default function App() {
               </NavigationContainer>
           </ApolloProvider>
         </WeekPlanProvider>
-      </UserProvider>
     </AuthContext.Provider>
   );
 }

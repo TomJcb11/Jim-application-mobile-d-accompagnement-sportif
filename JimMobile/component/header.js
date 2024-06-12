@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet,TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { UserProfile } from '../screens/UserProfileScreen'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 export default function Header() {
     const navigation = useNavigation();
@@ -9,7 +11,9 @@ export default function Header() {
     return (
       <View style={styles.container}>
         <Text style={styles.logo}>Jim</Text>
-        <Button title="User Profile" onPress={() => navigation.navigate('UserProfile')} />
+        <TouchableOpacity onPress={() => navigation.navigate('UserProfile')}>
+          <MaterialCommunityIcons name="human-edit" size={40} color="#000" />
+        </TouchableOpacity>
       </View>
     );
   }

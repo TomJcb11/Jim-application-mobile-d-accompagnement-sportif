@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Button, TextInput, StyleSheet, Text, Alert,View } from 'react-native';
-import UserContext from '../contexts/UserContext';
+import AuthContext from '../contexts/AuthContext';
 
 const ScreenTwo = ({navigation}) => {
-  const context = useContext(UserContext);
+  const context = useContext(AuthContext);
   const user = context?.user;
   const setUser = context?.setUser;
 
