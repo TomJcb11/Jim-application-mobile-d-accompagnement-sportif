@@ -144,6 +144,15 @@ const resolvers = {
     userBodies: () => {
       return prisma.userBody.findMany();
     },
+    getUserIssues: async (_, { userId }, { db }) => {
+      // Remplacer 'db.getHealthIssuesByUserId' par votre méthode réelle pour récupérer les problèmes de santé
+      return prisma.UserHealthIssue.findMany({
+        where: {
+          userId:userId
+        }
+      });
+    }
+
 
   },
   Mutation: {

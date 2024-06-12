@@ -18,6 +18,7 @@ scalar GraphQLJSON
 type Query {
     user(userId: ID!): User
     users: [User]
+    getUserIssues(userId: ID!): [UserHealthIssue!]!
     userHealthIssue(id: ID!): UserHealthIssue
     userHealthIssues: [UserHealthIssue]
     level(levelId: ID!): Levels
