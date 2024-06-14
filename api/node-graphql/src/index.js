@@ -11,8 +11,11 @@ const fs = require('fs');
 const https = require('https');
 
 //importing diffenrent services
-const getExercises = require('./services/dataProvider.js');
-const generateWeeklyPlan =require('./services/generateWeeklyPlan.js')
+
+
+const {adjustExerciseLoad} = require('./services/updateWeekplan.js')
+
+
 
 const app = express();
 
@@ -28,7 +31,6 @@ const sslServer = https.createServer({
 
   
 
-// Utilisez morgan pour enregistrer les requêtes
 app.use(cors());
 
 
@@ -76,43 +78,15 @@ const prisma = require('./prismaClient.js');
     
 
     app.get('/', (req, res) => {
-        res.send('Hello World');
-    });
-    app.get('/exercises', (req, res) => {
-        getExercises({ type: 'stretching'})
-          .then(data => res.json(data))
-          .catch(err => res.status(500).json({ error: err.message }));
+        res.send('Hello World \n Welcome on Jim API');
     });
 
-    app.get('/weekPlan', async (req,res) =>{
-        const userProvided2 = {
-            daysOfTheWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            objectives: ['cardio', 'strength', 'stretching'],
-            Infrastructure: ['Yes'],
-            level: ['intermediate'],
-            targetedMuscles: {
-                upperBody: ['chest', 'abdominals', 'neck'],
-                back: ['lats', 'traps', 'lower_back', 'middle_back'],
-                arm: ['biceps', 'forearms', 'triceps']
-            }
-        };
-        const userProvided = {
-            daysOfTheWeek: ['Monday', 'Tuesday','Wednesday','Thursday'],
-            objectives: ['cardio','stretching'],
-            Infrastructure: ['Yes'],
-            level: ['beginner'],
-            targetedMuscles: {
-                legs: ['abductors', 'adductors', 'quadriceps', 'calves', 'glutes', 'hamstrings'],
-                upperBody: ['chest', 'abdominals', 'neck'],
-                back: ['lats', 'traps', 'lower_back', 'middle_back'],
-                arm: ['biceps', 'forearms', 'triceps']
-            }
-        };
-        
-        const plan = await generateWeeklyPlan(userProvided);
-        res.json(plan);
-        console.log(plan)
-    })
+    
+    
+
+    
+
+    
 })();
 
 

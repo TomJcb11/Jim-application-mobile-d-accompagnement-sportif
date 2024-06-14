@@ -78,13 +78,14 @@ input WeekPlanInput {
     infrastructureAvailability: Infrastructure
     programData: GraphQLJSON
     dataProviding: GraphQLJSON
+    userScaling:GraphQLJSON
 }
 
 input WorkoutSessionInput {
-    weekPlanId: String
-    sessionData: GraphQLJSON
-    healthIssues: Health
-    currentDate: String
+  weekPlanId: String
+  sessionData: GraphQLJSON
+  healthIssues: GraphQLJSON
+  currentDate: String
 }
 
 input UserBodyInput {

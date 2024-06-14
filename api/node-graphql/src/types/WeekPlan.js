@@ -25,6 +25,7 @@ type WeekPlan {
     infrastructureAvailability: Infrastructure
     programData: GraphQLJSON
     dataProviding:GraphQLJSON
+    userScaling:GraphQLJSON  
     programStartDate: String
     workoutSessions: [WorkoutSession]
 }

@@ -50,10 +50,13 @@ async function getExerciseData(randomExercises) {
               exerciseData[j].sets = 3;
               exerciseData[j].rest = 120;
               exerciseData[j].reps = "Failure";
-              if (exerciseData[j].equipment!='body_only'){
+              if (exerciseData[j].equipment!='body_only' && exerciseData[j].type !== 'cardio' && exerciseData[j].type !== 'stretching'){
                 exerciseData[j].charge = 10;
                 exerciseData[j].sets = 6;
                 exerciseData[j].reps = 12;
+              }
+              if ( exerciseData[j].type === 'cardio'){
+                exerciseData[j].duration = "30 min";
               }
                 
           }

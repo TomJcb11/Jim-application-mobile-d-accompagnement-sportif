@@ -21,7 +21,7 @@ type WorkoutSession {
     weekPlanId: String
     weekPlan: WeekPlan
     sessionData: GraphQLJSON
-    healthIssues: Health
+    healthIssues: GraphQLJSON
     currentDate: String
 }
 `;

@@ -116,7 +116,8 @@ model WeekPlan {
   programUser                 User?           @relation("UserRelation", fields: [programUserId], references: [userId])
   infrastructureAvailability Infrastructure?
   programData                 Json
-  dataProviding               Json            
+  dataProviding               Json
+  userScaling                 Json            @default("{}")
   workoutSessions             WorkoutSession[]
 }
 
@@ -125,7 +126,7 @@ model WorkoutSession {
   weekPlanId    String
   weekPlan      WeekPlan  @relation(fields: [weekPlanId], references: [id])
   sessionData   Json
-  healthIssues  Health  
+  healthIssues  Json  
   currentDate   DateTime
 }
 

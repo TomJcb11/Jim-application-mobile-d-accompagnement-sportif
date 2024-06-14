@@ -4,7 +4,10 @@ const bcrypt = require('bcryptjs');
 const  prisma = require('./prismaClient.js')
 const { DateTimeResolver } = require('graphql-scalars');
 const jwt = require('jsonwebtoken');
+
 const generateWeeklyPlan = require('./services/generateWeeklyPlan.js')
+const updateScaling = require('./services/userScaling.js')
+const adjustExerciseLoad = require('./services/updateWeekplan.js')
 
 function generateId() {
   return cuid();
@@ -181,7 +184,6 @@ const resolvers = {
         throw new Error('This email is already associated with an account');
       }
 
-      // end of the test bloc
     
       try {
         const newUser = await prisma.user.create({
@@ -199,7 +201,6 @@ const resolvers = {
           },
         })
         console.log("New user correctly added");
-        console.log(user)
         const userBodyData = user.userBody.map(body => ({
           ...body,
           userId: newUser.userId,
@@ -216,8 +217,6 @@ const resolvers = {
           id: cuid(),
           healthIssue: issue.healthIssue,
         }));
-        console.log(userBodyData);
-        console.log(healthIssueData);
     
         await prisma.$transaction([
           prisma.UserBody.createMany({ data: userBodyData }),
@@ -308,11 +307,30 @@ const resolvers = {
       });
     return newPlan;
     },
-    createWorkoutSession: async (_parent, { workoutSession }) => {
-      const newSession = await prisma.workoutSession.create({
-        data: workoutSession
-      });
-      return newSession;
+    createWorkoutSession: async (_, { workoutSession }) => {
+      const { weekPlanId, currentDate, sessionData, healthIssues } = workoutSession;
+    
+      try {
+        const newSession = await prisma.workoutSession.create({
+          data: {
+            weekPlanId,
+            currentDate,
+            sessionData: JSON.stringify(sessionData), // Convertir en JSON string si nécessaire
+            healthIssues: JSON.stringify(healthIssues) // Directement stocker comme JSON
+          }
+        })
+        
+          
+          updateScaling(weekPlanId);
+          console.log('scaling updated');
+          adjustExerciseLoad(weekPlanId);
+          console.log('program load  updated');
+        
+    
+        return newSession;
+      } catch (error) {
+        throw new Error(`Failed to create workout session: ${error.message}`);
+      }
     },
     createUserBody: async (_parent, { userBody }) => {
       const newBody = await prisma.userBody.create({
