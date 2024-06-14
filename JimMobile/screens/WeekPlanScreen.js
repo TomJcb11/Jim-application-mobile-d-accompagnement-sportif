@@ -31,7 +31,7 @@ export default function WeekPlanScreen() {
   const fetchWeekPlan = async () => {
     setIsLoading(true);
     try {
-      if (isAuthenticated){
+      if (isAuthenticated && user){
           const response = await fetch(process.env.API_URL, {
             method: 'POST',
             headers: {
@@ -47,7 +47,7 @@ export default function WeekPlanScreen() {
               }
               `,
               variables: {
-                programUserId: user.userId,
+                programUserId: user ? user.userId : null,
               },
             }),
           });
@@ -58,6 +58,7 @@ export default function WeekPlanScreen() {
           if (data.data.weekPlan === null) {
             setProgramData(null);
             setweekPlanId(null)
+          
            
 
           } else {
@@ -65,14 +66,15 @@ export default function WeekPlanScreen() {
             console.log("context program data updated")
             setweekPlanId(data.data.weekPlan.id)
             console.log("context program id updated")
-        }
-         console.log(
+            console.log(
               "\n A user has just ask for his weekPlan :\n",
               " email :",user.email,'\n',
               " userId :",user.userId,'\n',
               
               " programData :",data,
               " weekPlanId :",data.data.weekPlan.id,'\n',)
+        }
+         
         }
       }
     catch (error) {
@@ -184,9 +186,10 @@ export default function WeekPlanScreen() {
             </>
           ) :  (
               <View>
-                <Text style={styles.infoText}> ¤ It seems that you have any training plan yet</Text>
+                <Text style={styles.infoText}> ¤ It seems that you dont have any training plan yet</Text>
                 <Text style={styles.infoText}> ¤ Creating your own weekly training plan gives you the flexibility to tailor your workouts to your specific needs and goals.</Text>
                 <Button title="Create my own Week Plan" onPress={() => navigation.navigate('WeekPlanForm')} />
+                <Button title="Reload week plan" onPress={fetchWeekPlan} />
               </View>
             )
           )
