@@ -73,25 +73,20 @@ async function updateScaling(weekplanId) {
         const userScalingValue = JSON.stringify(exercisesByMuscle);
 
         // Utiliser Prisma pour mettre à jour le champ userScaling
-        prisma.weekPlan.update({
+        await prisma.weekPlan.update({
             where: {
                 id: weekplanId, // Assurez-vous que weekPlanId est défini et accessible
             },
             data: {
                 userScaling: userScalingValue,
             },
-        }).then(updatedWeekPlan => {
-            console.log('Données de userScaling mises à jour avec succès:');
-            return updatedWeekPlan
-            // Retourner ou traiter updatedWeekPlan selon les besoins de votre application
-        }).catch(error => {
-            console.error('Erreur lors de la mise à jour du userScaling:', error);
-            // Gérer l'erreur comme nécessaire
-        });
-    } catch (error) {
-        console.error("Erreur lors de la récupération des données du programme :", error);
-        return null;
-    }
+        }); 
+            console.log('Données de userScaling mises à jour avec succès');
+            return userScalingValue; // Retourne les données mises à jour si besoin
+          } catch (error) {
+            console.error("Erreur lors de la récupération des données du programme :", error);
+            return null;
+          }
 }
 
 module.exports =  updateScaling ;

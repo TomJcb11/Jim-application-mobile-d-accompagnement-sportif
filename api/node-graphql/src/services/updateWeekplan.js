@@ -40,7 +40,6 @@ async function adjustExerciseLoad(weekplanId) {
             }
         });
 
-        try {
             
             await prisma.weekPlan.update({
                 where: {
@@ -50,10 +49,8 @@ async function adjustExerciseLoad(weekplanId) {
                     programData: programData,
                 },
             });
-        } catch (updateError) {
-            console.error('Erreur lors de la mise à jour de programData:', updateError);
-            throw updateError;
-        }
+            return programData;
+
     } catch (error) {
         console.error('Erreur lors de l\'ajustement de la charge des exercices:', error);
         throw error;

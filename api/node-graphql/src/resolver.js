@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const generateWeeklyPlan = require('./services/generateWeeklyPlan.js')
 const updateScaling = require('./services/userScaling.js')
 const adjustExerciseLoad = require('./services/updateWeekplan.js')
+const {displaySessions} = require('./services/analytics.js')
 
 function generateId() {
   return cuid();
@@ -148,12 +149,34 @@ const resolvers = {
       return prisma.userBody.findMany();
     },
     getUserIssues: async (_, { userId }, { db }) => {
-      // Remplacer 'db.getHealthIssuesByUserId' par votre méthode réelle pour récupérer les problèmes de santé
       return prisma.UserHealthIssue.findMany({
         where: {
           userId:userId
         }
       });
+    },
+
+    getAnalytics: async (_, { weekplanId }) => {
+      try {
+        console.log("Fetching analytics for weekplanId:", weekplanId);
+        const sessionDataByDate = await displaySessions(weekplanId);
+
+        // Transformez sessionDataByDate en la structure attendue par votre schéma GraphQL
+        const analyticsData = Object.keys(sessionDataByDate).map(date => ({
+          date: date,
+          analytics: sessionDataByDate[date].map(exercise => ({
+            muscle: exercise.muscle,
+            name: exercise.name,
+            load: exercise.load
+          }))
+        }));
+
+        console.log("Result from displaySessions:", analyticsData); 
+        return analyticsData;
+      } catch (error) {
+        console.error("Error fetching analytics:", error);
+        throw new Error("Error fetching analytics");
+      }
     }
 
 
@@ -321,9 +344,10 @@ const resolvers = {
         })
         
           
-          updateScaling(weekPlanId);
+          await updateScaling(weekPlanId);
+          
+          await adjustExerciseLoad(weekPlanId);
           console.log('scaling updated');
-          adjustExerciseLoad(weekPlanId);
           console.log('program load  updated');
         
     

@@ -13,7 +13,7 @@ const https = require('https');
 //importing diffenrent services
 
 
-const {adjustExerciseLoad} = require('./services/updateWeekplan.js')
+const {displaySessions} = require('./services/analytics.js')
 
 
 
@@ -80,6 +80,18 @@ const prisma = require('./prismaClient.js');
     app.get('/', (req, res) => {
         res.send('Hello World \n Welcome on Jim API');
     });
+
+    app.get('/test', async (req, res) => {
+        try {
+          // Appel de monService et attente de sa réponse
+          const reponseDuService = await displaySessions("clxeudcfx000115om6ny0e66r");
+          // Envoi de la réponse du service au client
+          res.send(reponseDuService);
+        } catch (erreur) {
+          // Gestion des erreurs potentielles
+          res.status(500).send("Erreur lors de l'appel du service");
+        }
+      });
 
     
     

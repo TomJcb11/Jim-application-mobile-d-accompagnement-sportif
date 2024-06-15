@@ -63,6 +63,17 @@ const typeDefs = `
     endurance
     flexibility
   }
+
+  type Exercise {
+  muscle: String
+  name: String
+  load: Int
+}
+
+type SessionsByDate {
+  date: String
+  analytics: [Exercise]
+}
 `;
 
 module.exports = typeDefs;

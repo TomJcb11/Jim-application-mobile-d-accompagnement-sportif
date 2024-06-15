@@ -39,6 +39,8 @@ type Query {
     workoutSessions: [WorkoutSession]
     userBody(id: ID!): UserBody
     userBodies: [UserBody]
+    getAnalytics(weekplanId: ID!): [SessionsByDate!]
+
   
 }
 `;
