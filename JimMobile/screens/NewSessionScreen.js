@@ -11,7 +11,7 @@ import { RoundedCheckbox } from "react-native-rounded-checkbox";
 
 
 
-import WeekPlanContext from '../contexts/weekPlanContext';
+import WeekPlanContext from '../contexts/weekPlanContext.js';
 import AuthContext from '../contexts/AuthContext';
 
 
