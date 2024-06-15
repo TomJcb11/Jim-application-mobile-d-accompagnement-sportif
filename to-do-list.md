@@ -9,19 +9,19 @@ R-proxy -> nginx
 partie docker
  img pour les DB
 
-## to do list : (plus à jour voir le fichier todo) 
+## to do list : (plus à jour voir le fichier todo)
 
-je laisse pour la chronologie mais en soi ca n'a plus bcp de sens mtn 
+je laisse pour la chronologie mais en soi ca n'a plus bcp de sens mtn
 
-* [ ] mise en place du service app
-* [ ] mise en place du service back
+* [X] mise en place du service app
+* [X] mise en place du service back
 * [X] mise en place du service db
 
   * [ ] ~~mongo~~
   * [X] postgres
   * [X] (ORM si c'est un plus)
   * [X] principe de migration, seed des DB
-* [ ] mise en place de Container docker
+* [X] mise en place de Container docker
 * [ ] ~~pipeline CI-CD (github actions ?)~~
 * [X] mise en place de *env* app/back, .....
 
@@ -39,10 +39,10 @@ suite à des discussion la mise en place d'un graphQL comme unique entry point p
 
 on a :
 
-* [ ] graphQL comme entrypoint qui va lui déléguer le reste des recherches vers node
-* [ ] node JS (avec express JS) qui va se charger d'interragir entre l'api et les DB
-* [ ] un serveur d'identification qui sera en communication entre l'application coté client et le backend à proprement dit , à voir si graphQL ou nodes doit gérer la communication
-* [ ] la mise en place d'une DB *~~Structurée~~* pour stocker des volumes de données importants et pas forcément structurés voir le tableau suivant.
+* [X] graphQL comme entrypoint qui va lui déléguer le reste des recherches vers node
+* [X] node JS (avec express JS) qui va se charger d'interragir entre l'api et les DB
+* [ ] ~~un serveur d'identification qui sera en communication entre l'application coté client et le backend à proprement dit , à voir si graphQL ou nodes doit gérer la communication~~
+* [ ] ~~la mise en place d'une DB *Structurée* pour stocker des volumes de données importants et pas forcément structurés voir le tableau suivant.~~
 
 | Caractéristique       | PostgreSQL                                 | MongoDB                                                                          |
 | ---------------------- | ------------------------------------------ | -------------------------------------------------------------------------------- |
@@ -100,22 +100,20 @@ donc par docker on aura
 >
 > En résumé, Docker Swarm est une solution d'orchestration de conteneurs Docker qui permet de simplifier le déploiement et la gestion des applications conteneurisées sur un cluster de machines, offrant ainsi une solution évolutive, robuste et sécurisée pour les environnements de production.
 
-
-
 ## note du 22/04 sur l'état actuel de jim
 
 * [X] Abandon de la base de données mongo
   Plus vraiment de sens d'avoir une db en plus , à la place on stocke les données "flexibles" sous forme de **json** dans PostgresQL
 
-### Etat des différents Services 
+### Etat des différents Services
 
 * [X] Node + express  sous TypeScript
 * [X] Prisma comme ORM de PostgresQL avec la mise en place de migration et de seed
-* [ ] GraphQL comme entrypoint api avec Apollo pour la communication entre l'application et le coté "back"
-* [ ] Redis comme outil de caching
-* [ ] RabbitMQ comme outil de messagerie asynchrone (système de file d'attente de tâches)
-* [ ] service back en docker
-* [ ] communication point-to-point app/back
+* [X] GraphQL comme entrypoint api avec Apollo pour la communication entre l'application et le coté "back"
+* [ ] ~~Redis comme outil de caching~~
+* [ ] ~~RabbitMQ comme outil de messagerie asynchrone (système de file d'attente de tâches)~~
+* [X] service back en docker
+* [X] communication point-to-point app/back
 
 ### Aparte théorique sur les services redis et rabbitmq
 
@@ -134,8 +132,6 @@ donc par docker on aura
 > De plus, si une commande est très importante et doit être livrée en priorité, le centre de tri peut la mettre en haut de la pile. C'est ce qu'on appelle la "priorité des messages" dans RabbitMQ.
 >
 > En résumé, RabbitMQ est un système qui aide à gérer et à distribuer efficacement les "messages" (ou tâches) dans un système informatique.
-
-
 
 > Copilot explication simple de Redis
 >
